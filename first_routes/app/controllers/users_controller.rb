@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-
   def index
     users = User.all
     render json: users
@@ -35,10 +34,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    # user = User.find(params[:id])
-    # user.delete
+    user = User.find(params[:id])
     User.delete(params[:id])
-    # redirect_to :index
+    render json: user
   end
 
   private

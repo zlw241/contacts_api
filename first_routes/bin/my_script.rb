@@ -12,7 +12,18 @@ def index_users
     puts RestClient.get(url)
 end
 
-def create_user(name, email)
+def index_contacts
+  url = Addressable::URI.new(
+    scheme: 'http',
+    host: 'localhost',
+    port: 3000,
+    path: '/contacts.html'
+  ).to_s
+
+  puts RestClient.get(url)
+end
+
+def create_user(username)
   url = Addressable::URI.new(
    scheme: 'http',
    host: 'localhost',
@@ -22,21 +33,49 @@ def create_user(name, email)
 
   puts RestClient.post(
     url,
-    { user: { name: name, email: email } }
+    { user: { username: username } }
   )
 end
 
-def update_user(user_id, name, email)
+def create_contact(name, email, user_id)
+  url = Addressable::URI.new(
+   scheme: 'http',
+   host: 'localhost',
+   port: 3000,
+   path: '/contacts.json'
+).to_s
+
+  puts RestClient.post(
+    url,
+    { contact: { name: name, email: email, user_id: user_id } }
+  )
+end
+
+def update_user(id, username)
   url = Addressable::URI.new(
     scheme: 'http',
     host: 'localhost',
     port: 3000,
-    path: "/users/#{user_id}"
+    path: "/users/#{id}"
   ).to_s
 
   puts RestClient.patch(
     url,
-    { user: { name: name, email: email } }
+    { user: { username: username } }
+  )
+end
+
+def update_contact(id, name, email, user_id)
+  url = Addressable::URI.new(
+    scheme: 'http',
+    host: 'localhost',
+    port: 3000,
+    path: "/contacts/#{id}"
+  ).to_s
+
+  puts RestClient.patch(
+    url,
+    { contact: { name: name, email: email, user_id: user_id } }
   )
 end
 
@@ -53,9 +92,13 @@ def delete_user(user_id)
   )
 end
 
-# create_user("Gizmo", "gizmo@gizmo.gizmo")
+def delete_contact(id)
+  url = Addressable::URI.new(
+    scheme: 'http',
+    host: 'localhost',
+    port: 3000,
+    path: "/contacts/#{id}"
+  ).to_s
 
-index_users
-# update_user("Daniel", "djrothblatt@gmail.com")
-# delete_user(3)
-# index_users
+  puts RestClient.delete(url)
+end
